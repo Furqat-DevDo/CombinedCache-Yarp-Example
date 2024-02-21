@@ -3,8 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("RedisCache");
@@ -16,12 +14,6 @@ builder.Services.AddDistributedRedisCache(options =>
 });
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 app.UseResponseCaching();
@@ -80,8 +72,7 @@ app.MapGet("/weather1", (IDistributedCache distributedCache, IMemoryCache memory
 
     return forecastData;
 })
-.WithName("GetWeather")
-.WithOpenApi();
+.WithName("GetWeather");
 
 app.Run();
 
